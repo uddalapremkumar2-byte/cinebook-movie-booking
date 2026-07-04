@@ -1,3 +1,15 @@
+import subprocess
+import os
+import time
+import requests
+
+# Check if backend is running, if not start it in background
+try:
+    requests.get("http://127.0.0.1:8000/auth/login")
+except requests.exceptions.ConnectionError:
+    if os.path.exists("backend_api.py"):
+        subprocess.Popen(["python", "backend_api.py"])
+        time.sleep(3)
 import streamlit as st
 import requests
 import pandas as pd
