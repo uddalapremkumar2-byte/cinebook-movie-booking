@@ -83,7 +83,7 @@ if st.session_state.stage != "LOGIN":
                 
     st.markdown("---")
 
-# ==================== LOGIN / SIGNUP (BYPASSED) ====================
+# ==================== LOGIN / SIGNUP (FIXED EMAIL LOGIC) ====================
 if st.session_state.stage == "LOGIN":
     portal_mode = st.radio("Choose Option:", ["Login", "Signup"], horizontal=True)
     email_in = st.text_input("Email ID:")
@@ -91,11 +91,13 @@ if st.session_state.stage == "LOGIN":
     
     if portal_mode == "Login":
         if st.button("Login", type="primary", use_container_width=True):
-            st.session_state.auth_user = email_in if email_in else "testuser2026@gmail.com"
+            # Capture the exact email entered by you instead of overriding it
+            st.session_state.auth_user = email_in if email_in else "user@cinebook.com"
             change_stage("CITY_SELECT")
     else:
         if st.button("Create Account", use_container_width=True):
-            st.session_state.auth_user = email_in if email_in else "rockybrother99@gmail.com"
+            # Capture the exact email entered by you instead of overriding it
+            st.session_state.auth_user = email_in if email_in else "user@cinebook.com"
             st.success("Account created successfully! Redirecting...")
             change_stage("CITY_SELECT")
 
@@ -215,7 +217,6 @@ elif st.session_state.stage == "PAYMENT_GATEWAY":
     st.text_input("Enter UPI ID or Card Number:", value="user@upi")
     
     if st.button("Proceed Payment", type="primary", use_container_width=True):
-        # Bypassing the transaction API layer directly to showcase the receipt
         change_stage("SUCCESS_RECEIPT")
 
 # ==================== DIGITAL TICKET RECEIPT ====================
