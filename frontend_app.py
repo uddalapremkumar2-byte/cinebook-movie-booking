@@ -69,7 +69,7 @@ if st.session_state.stage != "LOGIN":
                         st.session_state.booking_data = {}
                     change_stage(target_step)
             else:
-                st.caption(f"👤 Account: **{st.session_state.auth_user if st.session_state.auth_user else 'Active'}**")
+                st.caption(f"👤 Account: **{st.session_state.auth_user}**")
 
         with nav_col2:
             if st.button("📁 My Bookings", use_container_width=True, key="force_nav_bookings_action"):
@@ -83,23 +83,27 @@ if st.session_state.stage != "LOGIN":
                 
     st.markdown("---")
 
-# ==================== LOGIN / SIGNUP (FIXED EMAIL LOGIC) ====================
+# ==================== LOGIN / SIGNUP (FIXED: FORCES EXACT TYPED EMAIL) ====================
 if st.session_state.stage == "LOGIN":
     portal_mode = st.radio("Choose Option:", ["Login", "Signup"], horizontal=True)
-    email_in = st.text_input("Email ID:")
+    email_in = st.text_input("Email ID:", key="user_email_input_field")
     pass_in = st.text_input("Password:", type="password")
     
     if portal_mode == "Login":
         if st.button("Login", type="primary", use_container_width=True):
-            # Capture the exact email entered by you instead of overriding it
-            st.session_state.auth_user = email_in if email_in else "user@cinebook.com"
-            change_stage("CITY_SELECT")
+            if email_in.strip() != "":
+                st.session_state.auth_user = email_in.strip()
+                change_stage("CITY_SELECT")
+            else:
+                st.warning("Please enter your Email ID first!")
     else:
         if st.button("Create Account", use_container_width=True):
-            # Capture the exact email entered by you instead of overriding it
-            st.session_state.auth_user = email_in if email_in else "user@cinebook.com"
-            st.success("Account created successfully! Redirecting...")
-            change_stage("CITY_SELECT")
+            if email_in.strip() != "":
+                st.session_state.auth_user = email_in.strip()
+                st.success("Account created successfully! Redirecting...")
+                change_stage("CITY_SELECT")
+            else:
+                st.warning("Please enter your Email ID first!")
 
 # ==================== SELECT CITY ====================
 elif st.session_state.stage == "CITY_SELECT":
